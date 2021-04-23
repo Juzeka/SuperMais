@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Dashboard{% endblock %}
+
+{% block main %}
+    <h1>Dashboard SuperMais</h1>
+    <a href="{% url 'dash_produtos' %}">Produtos</a>
+    <a href="{% url 'dash_categorias' %}">Categorias</a>
+
+{% endblock %}

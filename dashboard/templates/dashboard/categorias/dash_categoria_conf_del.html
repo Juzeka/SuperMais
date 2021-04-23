@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Categoria - Editar{% endblock %}
+
+{% block main %}
+    <h1>Deseja mesmo excluir?</h1>
+    <h2>Categoria: {{ categoria.nome }}</h2>
+    <form action="{% url 'dash_categoria_del' categoria.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" >Deletar</button>
+    </form>
+    <a href="{% url 'dash_categoria' %}">Voltar</a>
+{% endblock %}

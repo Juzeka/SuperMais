@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Categoria - Editar{% endblock %}
+
+{% block main %}
+    <h1>Editar categoria</h1>
+    <h2>Categoria: {{ categoria.nome }}</h2>
+    <form action="{% url 'dash_categoria_update' categoria.id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="btn btn-warning">Alterar</button>
+        <a href="{% url 'dash_categorias' %}" class="btn btn-primary">Voltar</a>
+    </form>
+{% endblock %}

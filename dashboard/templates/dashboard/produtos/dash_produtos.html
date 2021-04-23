@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Produtos{% endblock %}
+
+{% block main %}
+    <h1>Produtos</h1>
+    <div class="container-fluid">
+        <a href="{% url 'dash_index' %}">Dashboard</a>
+        <div class="row justify-content-center">
+            <h3>Adicionar novo produto</h3>
+        </div>
+        <form action="{% url 'dash_novo_produto' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row justify-content-md-center">
+                <div class="form-group col-md-3">
+                    <label for="id_nome">Produto:</label>
+                    {{ form.nome}}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_categoria">Categoria:</label>
+                    {{ form.categoria}}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_quantidade">Quantidade:</label>
+                    {{ form.quantidade}}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_valor_pago">Valor da mercadoria:</label>
+                    {{ form.valor_pago}}
+                </div>
+                <button type="submit" class="btn btn-primary">Adcionar</button>
+            </div>
+        </form>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Quantidade</th>
+                <th>Pc Mercadoria</th>
+                <th>Pc Atacado</th>
+                <th>Criado</th>
+                <th>Modificado</th>
+                <th>Estoque</th>
+                <th>Operações</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+                <tr>
+                    <td><a href="{% url 'dash_produto_update' produto.id %}">{{produto.id}}</a></td>
+                    <td><a href="{% url 'dash_produto_update' produto.id %}">{{produto.nome}}</a></td>
+                    <td>{{produto.categoria}}</td>
+                    <td>{{produto.quantidade}}</td>
+                    <td>{{produto.valor_pago}}</td>
+                    <td>{{produto.preco_medio}}</td>
+                    <td>{{produto.data_criada |date:'d/m/y - h:i:s'}}</td>
+                    <td>{{produto.data_modificacao |date:'d/m/y - h:i:s'}}</td>
+                    {% if produto.status == True  %}
+                        <td>Disponível</td>
+                    {% else %}
+                        <td>Inisponível</td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'dash_produto_update' produto.id %}">Editar</a> |
+                        <a href="{% url 'dash_produto_del' produto.id %}">Apagar</a> |
+                        <a href="{% url 'dash_nova_carga_produto' produto.id %}">Abastecer</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

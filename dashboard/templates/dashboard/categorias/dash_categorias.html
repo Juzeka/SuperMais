@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Categorias{% endblock %}
+
+{% block main %}
+    <h1>Categorias</h1>
+    <div class="container-fluid">
+        <a href="{% url 'dash_index' %}">Dashboard</a>
+        <div class="row justify-content-center">
+            <h3>Adicionar nova categoria</h3>
+        </div>
+        <form action="{% url 'dash_nova_categoria' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row justify-content-md-center">
+                <div class="form-group col-md-3">
+                    <label for="id_nome">Categoria:</label>
+                    {{ form.nome}}
+                </div>
+                <button type="submit" class="btn btn-primary">Adcionar</button>
+            </div>
+        </form>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Categoria</th>
+                <th>Operações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categoria in categorias %}
+                <tr>
+                    <td><a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.id}}</a></td>
+                    <td><a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.nome}}</a></td>
+                    <td>
+                        <a href="{% url 'dash_categoria_update' categoria.id %}">Editar</a> |
+                        <a href="{% url 'dash_categoria_update' categoria.id %}">Apagar</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

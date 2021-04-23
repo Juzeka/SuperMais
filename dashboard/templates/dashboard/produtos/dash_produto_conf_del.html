@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Produtos - Editar{% endblock %}
+
+{% block main %}
+    <h1>Deseja mesmo excluir?</h1>
+    <h2>Produto: {{produto.nome}}</h2>
+    <h3>Categoria: {{ produto.categoria }}</h3>
+    <form action="{% url 'dash_produto_del' produto.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" >Deletar</button>
+    </form>
+    <a href="{% url 'dash_produtos' %}">Voltar</a>
+{% endblock %}
