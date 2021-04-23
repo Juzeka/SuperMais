@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block titulo %}SuperMais{% endblock %}
+
+{% block main %}
+    <h1>SuperMais</h1>
+
+<div class="container">
+    <div class="row">
+            <div class="col-12">
+
+            <h2>Produtos</h2>
+            </div>
+            {% for produto in produtos %}
+            <div class="col-4">
+                <div class="card mb-2 mt-2" style="width: 22 rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{produto.nome}}</h5>
+                        <span class="card-title">{{produto.categoria}}</span>
+                        <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
+                        <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
+                    </div>
+                    <a href="" class="btn btn-primary">Comprar</a>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -51,8 +51,8 @@
         <tbody>
             {% for produto in produtos %}
                 <tr>
-                    <td><a href="{% url 'dash_produto_update' produto.id %}">{{produto.id}}</a></td>
-                    <td><a href="{% url 'dash_produto_update' produto.id %}">{{produto.nome}}</a></td>
+                    <td>{{produto.id}}</td>
+                    <td>{{produto.nome}}</td>
                     <td>{{produto.categoria}}</td>
                     <td>{{produto.quantidade}}</td>
                     <td>{{produto.valor_pago}}</td>
