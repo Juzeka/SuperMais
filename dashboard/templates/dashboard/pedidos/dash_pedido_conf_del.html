@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Pedido - Editar{% endblock %}
+
+{% block main %}
+    <h1>Deseja mesmo excluir?</h1>
+    <h2>Pedido: {{pedido.cliente}}</h2>
+    <h3>Endereço: {{ pedido.endereco }}</h3>
+    <form action="{% url 'pedido_del' pedido.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" >Deletar</button>
+    </form>
+    <a href="{% url 'pedidos_list' %}">Voltar</a>
+{% endblock %}

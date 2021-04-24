@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Finalizar Compra{% endblock %}
+
+{% block main %}
+<h1>Finalizar Compra</h1>
+{% if carrinho %}
+<div class="row">
+    <div class="col-6">
+        <form action="{% url 'finalizar_pedido' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-success " value="Finalizar Compra">
+        </form>
+    </div>
+    <div class="col-6">
+        <h4>Resumo da Compar</h4>
+        <ul>
+            {% for item in carrinho %}
+            <li>
+                {{ item.qntd }} X {{ item.produto.nome }}
+                <span>R$ {{ item.preco_total }}</span>
+            </li>
+            {%endfor%}
+            <li>{{ carrinho.get_preco_total }}</li>
+        </ul>
+
+    </div>
+    <div class="col-12">
+        <a href="{% url 'carrinho_detalhe' %}" class="btn btn-primary">Voltar para o carrinho</a>
+
+    </div>
+</div>
+{%else%}
+<h1>Carrinho está vazio!</h1>
+<a href="{% url 'super_index' %}" class="btn btn-primary">Continuar Comprando</a>
+<a href="{% url 'finalizar_pedido' %}" class="btn btn-success {% if not carrinho %}disabled{%endif%} ">Finalizar Compra</a>
+{%endif%}
+{% endblock %}

@@ -35,10 +35,17 @@
                         <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
                         <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
                     </div>
+                    {% if produto.status == False%}
                     <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" class="btn btn-primary" value="Mais">
+                        <input type="submit" class="btn btn-primary disabled" hidden value="Comprar">
                     </form>
+                    {%else%}
+                    <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-primary" value="Comprar">
+                    </form>
+                    {%endif%}
                 </div>
             </div>
             {% endfor %}

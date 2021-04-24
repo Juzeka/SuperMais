@@ -20,11 +20,19 @@
                         <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
                         <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
                     </div>
+                    {% if produto.status == False%}
+                    <form action="{% url 'carrinho_add' produto.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ carrinho_form }}
+                        <input type="submit" class="btn btn-primary disabled" hidden value="Adicionar ao carrinho">
+                    </form>
+                    {%else%}
                     <form action="{% url 'carrinho_add' produto.id %}" method="POST">
                         {% csrf_token %}
                         {{ carrinho_form }}
                         <input type="submit" class="btn btn-primary" value="Adicionar ao carrinho">
                     </form>
+                    {%endif%}
                 </div>
             </div>
     </div>

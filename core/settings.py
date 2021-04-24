@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'carrinho.apps.CarrinhoConfig',
     'supermercado.apps.SupermercadoConfig',
+    'pedido.apps.PedidoConfig',
 ]
 
 MIDDLEWARE = [

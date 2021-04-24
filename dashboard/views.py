@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from dashboard.forms import ProdutoForm, CategoriaForm
 from dashboard.models import Produto, Categoria
-from decimal import Decimal
+from pedido.forms import PedidoForm, ItemPedidoForm
+from pedido.models import Pedido, ItemPedido
 
 
 def dash_index(request):
@@ -126,6 +127,7 @@ def dash_nova_carga_produto(request,id):
                 nova_carga.quantidade += produto_old['id_quantidade']
                 nova_carga.valor_pago += produto_old['id_valor_pago']
                 nova_carga.preco_medio =nova_carga.valor_pago / nova_carga.quantidade
+                nova_carga.status = True
                 nova_carga.save()
                 return redirect('dash_produtos')
         else:
@@ -182,3 +184,91 @@ def dash_produto_del(request,id):
         return redirect('dash_produtos')
     else:
         return render(request,'dashboard/produtos/dash_produto_conf_del.html',get_instacia(request,id))
+
+
+# ---------Pedidos ----------#
+
+def pedidos_list(request):
+    contexto = {}
+    pedidos = Pedido.objects.filter(pago=True).order_by('-id')
+
+    contexto['pedidos'] = pedidos
+    return render(request, 'dashboard/pedidos/dash_pedidos.html',contexto)
+
+
+def itens_list(request):
+    contexto = {}
+    itens = ItemPedido.objects.all().order_by('-id')
+
+    contexto['itens'] = itens
+    return render(request, 'dashboard/itens/dash_itens.html',contexto)
+
+
+def item_detalhe(request,id):
+    contexto={}
+    item = get_object_or_404(ItemPedido, id=id)
+
+    contexto['item'] = item
+    return render(request,'dashboard/itens/dash_item_detalhe.html',contexto)
+
+
+def item_del(request,id):
+    item = get_object_or_404(ItemPedido, id=id)
+
+    if request.method == 'POST':
+        item.delete()
+        return redirect('itens_list')
+
+    return render(request,'dashboard/itens/dash_item_conf_del.html',{'item':item})
+
+
+def item_update(request,id):
+    contexto ={}
+    item = get_object_or_404(ItemPedido, id=id)
+    form = ItemPedidoForm(request.POST or None, instance=item)
+
+    contexto['item'] = item
+    contexto['form'] = form
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('pedidos_list')
+    else:
+        return render(request,'dashboard/itens/dash_item_update.html', contexto)
+
+
+def pedido_detalhe(request, id):
+    contexto = {}
+    pedido = get_object_or_404(Pedido, id=id)
+    pedido_itens = ItemPedido.objects.filter(pedido=pedido.id)
+
+    contexto['pedido'] = pedido
+    contexto['itens'] = pedido_itens
+    return render(request,'dashboard/pedidos/dash_pedido_detalhe.html',contexto)
+
+
+def pedido_update(request,id):
+    contexto ={}
+    pedido = get_object_or_404(Pedido, id=id)
+    form = PedidoForm(request.POST or None, instance=pedido)
+
+    contexto['pedido'] = pedido
+    contexto['form'] = form
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('pedidos_list')
+    else:
+        return render(request,'dashboard/pedidos/dash_pedido_update.html', contexto)
+
+
+def pedido_del(request,id):
+    pedido = get_object_or_404(Pedido, id=id)
+
+    if request.method == 'POST':
+        pedido.delete()
+        return redirect('pedidos_list')
+
+    return render(request,'dashboard/pedidos/dash_pedido_conf_del.html',{'pedido':pedido})
+
+
