@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block titulo %}SuperMais{% endblock %}
+
+{% block main %}
+    <h1>SuperMais</h1>
+
+<div class="container">
+    <div class="row">
+            <div class="col-12">
+
+            <h2>Produto</h2>
+            </div>
+
+            <div class="col-12">
+                <div class="card mb-2 mt-2" style="width: 30 rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{produto.nome}}</h5>
+                        <span class="card-title">{{produto.categoria}}</span>
+                        <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
+                        <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
+                    </div>
+                    <form action="{% url 'carrinho_add' produto.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ carrinho_form }}
+                        <input type="submit" class="btn btn-primary" value="Adicionar ao carrinho">
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

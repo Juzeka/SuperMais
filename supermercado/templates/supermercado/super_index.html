@@ -4,12 +4,27 @@
 
 {% block main %}
     <h1>SuperMais</h1>
+<h3>Categorias</h3>
+    <ul>
+        <li>
+            <a class="{% if not categoria%}disabled{%endif%}" href="{% url 'super_index' %}">Todas</a>
+        </li>
+        {% for cat in categorias %}
+        <li>
+            <a class="{% if categoria == cat.nome%}disabled{%endif%}" href="{% url 'super_index' cat.nome %}">{{cat.nome}}</a>
+        </li>
+        {% endfor %}
+    </ul>
 
+<form action="" method="POST">
+    {% csrf_token %}
+    <a href="{% url 'carrinho_detalhe' %}">Meu carrinh</a>
+</form>
 <div class="container">
     <div class="row">
             <div class="col-12">
 
-            <h2>Produtos</h2>
+            <h2>{% if categoria %}{{categoria.nome}}{%else%}Produtos{%endif%}</h2>
             </div>
             {% for produto in produtos %}
             <div class="col-4">
@@ -20,7 +35,10 @@
                         <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
                         <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
                     </div>
-                    <a href="" class="btn btn-primary">Comprar</a>
+                    <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-primary" value="Mais">
+                    </form>
                 </div>
             </div>
             {% endfor %}

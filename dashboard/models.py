@@ -20,5 +20,7 @@ class Produto(models.Model):
     data_modificacao = models.DateTimeField(auto_now=True,verbose_name='Modificado')
     status = models.BooleanField(default=True, auto_created=True)
 
+
+
     def __str__(self):
         return self.nome
