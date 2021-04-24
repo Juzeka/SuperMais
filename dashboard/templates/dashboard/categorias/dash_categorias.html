@@ -6,6 +6,8 @@
     <h1>Categorias</h1>
     <div class="container-fluid">
         <a href="{% url 'dash_index' %}">Dashboard</a>
+        <a href="{% url 'dash_produtos' %}">Produtos</a>
+
         <div class="row justify-content-center">
             <h3>Adicionar nova categoria</h3>
         </div>
@@ -35,7 +37,7 @@
                     <td><a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.nome}}</a></td>
                     <td>
                         <a href="{% url 'dash_categoria_update' categoria.id %}">Editar</a> |
-                        <a href="{% url 'dash_categoria_update' categoria.id %}">Apagar</a>
+                        <a href="{% url 'dash_categoria_del' categoria.id %}">Apagar</a>
                     </td>
 
                 </tr>

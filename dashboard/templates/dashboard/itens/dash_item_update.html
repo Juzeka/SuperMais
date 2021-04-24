@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Pedidos - Editar{% endblock %}
+
+{% block main %}
+    <h1>Editar Item </h1>
+    <h2>{{item.produto}}</h2>
+    <form action="{% url 'item_update' item.id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <input type="submit" class="btn btn-warning" value="Alterar">
+        <a href="{% url 'item_detalhe' item.id %}" class="btn btn-primary">Voltar</a>
+    </form>
+{% endblock %}

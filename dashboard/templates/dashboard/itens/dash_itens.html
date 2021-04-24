@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Itens{% endblock %}
+
+{% block main %}
+<h1>Itens</h1>
+<div class="container-fluid">
+        <a href="{% url 'dash_index' %}">Dashboard</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Endereço</th>
+                <th>preco</th>
+                <th>quandidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in itens %}
+                <tr>
+                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.id}}</a></td>
+                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.pedido}}</a></td>
+                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.produto}}</a></td>
+                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.preco}}</a></td>
+                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.quantidade}}</a></td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

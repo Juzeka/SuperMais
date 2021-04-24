@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Pedido - Editar{% endblock %}
+
+{% block main %}
+    <h1>Deseja mesmo excluir?</h1>
+    <h2>Pedido: {{item.pedido}}</h2>
+    <h3>Produto: {{ item.produto }}</h3>
+    <form action="{% url 'item_del' item.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" >Deletar</button>
+    </form>
+    <a href="{% url 'itens_list' %}">Voltar</a>
+{% endblock %}

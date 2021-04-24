@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Detalhe Pedido{% endblock %}
+
+{% block main %}
+<h1>Detalhe Pedido</h1>
+<div class="container-fluid">
+    <a href="{% url 'pedidos_list' %}">Pedidos</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Endereço</th>
+                <th>Status</th>
+                <th>Operações</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>{{pedido.id}}</td>
+                    <td>{{pedido.cliente}}</td>
+                    <td>{{pedido.endereco}}</td>
+                    {% if pedido.pago == True %}
+                    <td>Concluída</td>
+                    {% else %}
+                    <td>Pendente</td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'pedido_update' pedido.id %}">Editar</a> |
+                        <a href="{% url 'pedido_del' pedido.id %}">Apagar</a> |
+                    </td>
+                </tr>
+
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Endereço</th>
+                <th>Preco</th>
+                <th>Quandidade</th>
+                <th>Subtotal</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for item in itens %}
+                <tr>
+                    <td>{{item.id}}</td>
+                    <td>{{item.produto}}</td>
+                    <td>{{item.preco}}</td>
+                    <td>{{item.quantidade}}</td>
+                    <td>{{item.get_total_preco}}</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total do Pedido</td>
+                    <td>{{pedido.get_total_pedido}}</td>
+                </tr>
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

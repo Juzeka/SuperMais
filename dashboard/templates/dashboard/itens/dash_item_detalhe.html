@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Itens{% endblock %}
+
+{% block main %}
+<h1>Detalhe Item</h1>
+<div class="container-fluid">
+    <a href="{% url 'itens_list' %}">Itens</a>
+    <table class="table">
+        <tr>
+            <td></td>
+            <td>{{item.pedido}}</td>
+            <td>{{item.produto}}</td>
+            <td>{{item.preco}}</td>
+            <td>{{item.quantidade}}</td>
+            <td>{{item.get_total_preco}}</td>
+            <td><a href="{% url 'item_update' item.id %}">Editar</a></td>
+            <td><a href="{% url 'item_del' item.id %}">Remover</a></td>
+        </tr>
+
+
+    </table>
+</div>
+{% endblock %}

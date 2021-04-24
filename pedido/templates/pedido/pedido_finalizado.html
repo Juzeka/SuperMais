@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Campra Concluída{% endblock %}
+
+{% block main %}
+{% if carrinho %}
+<h1>Campra Efetuada com Sucesso</h1>
+<div class="row">
+    <div class="col-6">
+        <ul>
+            {% for item in carrinho %}
+            <li>
+                {{ item.qntd }} X {{ item.produto.nome }}
+                <span>R$ {{ item.preco_total }}</span>
+            </li>
+            {%endfor%}
+            <li>{{ carrinho.get_preco_total }}</li>
+        </ul>
+
+    </div>
+    <div class="col-12">
+        <a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
+    </div>
+</div>
+{%else%}
+<h1>Carrinho está vazio!</h1>
+<a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
+{%endif%}
+{% endblock %}

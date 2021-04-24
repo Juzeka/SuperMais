@@ -14,7 +14,7 @@ class Carrinho(object):
         carrinho = self.session.get(settings.CARRINHO_SESSION_ID)
         if not carrinho:
             carrinho = self.session[settings.CARRINHO_SESSION_ID] = {}
-        print(f'contrutor: {carrinho}')
+
         self.carrinho = carrinho
 
 
