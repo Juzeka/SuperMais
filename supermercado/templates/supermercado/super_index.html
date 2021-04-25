@@ -2,19 +2,13 @@
 
 {% block titulo %}SuperMais{% endblock %}
 
+{% block navbar %}
+{% include 'parciais/_super_header.html' %}
+{% endblock %}
+
+
 {% block main %}
-    <h1>SuperMais</h1>
-<h3>Categorias</h3>
-    <ul>
-        <li>
-            <a class="{% if not categoria%}disabled{%endif%}" href="{% url 'super_index' %}">Todas</a>
-        </li>
-        {% for cat in categorias %}
-        <li>
-            <a class="{% if categoria == cat.nome%}disabled{%endif%}" href="{% url 'super_index' cat.nome %}">{{cat.nome}}</a>
-        </li>
-        {% endfor %}
-    </ul>
+<h1>SuperMais</h1>
 
 <form action="" method="POST">
     {% csrf_token %}
@@ -22,33 +16,35 @@
 </form>
 <div class="container">
     <div class="row">
-            <div class="col-12">
+        <div class="col-12">
 
             <h2>{% if categoria %}{{categoria.nome}}{%else%}Produtos{%endif%}</h2>
-            </div>
-            {% for produto in produtos %}
-            <div class="col-4">
-                <div class="card mb-2 mt-2" style="width: 22 rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{produto.nome}}</h5>
-                        <span class="card-title">{{produto.categoria}}</span>
-                        <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
-                        <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
-                    </div>
-                    {% if produto.status == False%}
-                    <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="submit" class="btn btn-primary disabled" hidden value="Comprar">
-                    </form>
-                    {%else%}
-                    <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="submit" class="btn btn-primary" value="Comprar">
-                    </form>
-                    {%endif%}
+        </div>
+        {% for produto in produtos %}
+        <div class="col-4">
+            <div class="card mb-2 mt-2" style="width: 22 rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{produto.nome}}</h5>
+                    <span class="card-title">{{produto.categoria}}</span>
+                    <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
+                    <p class="card-text"><small
+                            class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small>
+                    </p>
                 </div>
+                {% if produto.status == False%}
+                <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-primary disabled" hidden value="Comprar">
+                </form>
+                {%else%}
+                <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-primary" value="Comprar">
+                </form>
+                {%endif%}
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

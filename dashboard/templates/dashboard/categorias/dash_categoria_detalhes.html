@@ -1,14 +1,32 @@
 {% extends 'base.html' %}
 
-{% block titulo %}Categoria - Editar{% endblock %}
+{% block titulo %}Aterar{% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 
 {% block main %}
-    <h1>Editar categoria</h1>
-    <h2>Categoria: {{ categoria.nome }}</h2>
-    <form action="{% url 'dash_categoria_update' categoria.id %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit" class="btn btn-warning">Alterar</button>
-        <a href="{% url 'dash_categorias' %}" class="btn btn-primary">Voltar</a>
-    </form>
+<div class="container">
+    <div class="row justify-content-md-center mt-4">
+        <h2>Alterar: {{ categoria.nome }}</h2>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <form action="{% url 'dash_categoria_update' categoria.id %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group col-md-12 mb-2">
+                    {{ form.as_p}}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="form-control btn btn-warning">Alterar</button>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'dash_categorias' %}" class="form-control btn btn-primary">Voltar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

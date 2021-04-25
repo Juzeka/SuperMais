@@ -2,11 +2,33 @@
 
 {% block titulo %}Dashboard{% endblock %}
 
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
+
 {% block main %}
-    <h1>Dashboard SuperMais</h1>
-    <a href="{% url 'dash_produtos' %}">Produtos</a>
-    <a href="{% url 'dash_categorias' %}">Categorias</a>
-    <a href="{% url 'pedidos_list' %}">Pedidos</a>
-    <a href="{% url 'itens_list' %}">Itens</a>
+<div class="container">
+    <div class="row">
+        <div class="col">Nº de Pedidos</div>
+        <div class="col">Lucros</div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'dash_produtos' %}" class="btn btn-primary">Produtos</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'dash_categorias' %}" class="btn btn-primary">Categorias</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'pedidos_list' %}"class="btn btn-primary">Pedidos</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'itens_list' %}"class="btn btn-primary">Itens</a>
+        </div>
+    
+    </div>
+</div>
 
 {% endblock %}

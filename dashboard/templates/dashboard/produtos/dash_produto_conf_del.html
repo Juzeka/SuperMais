@@ -1,14 +1,48 @@
 {% extends 'base.html' %}
 
-{% block titulo %}Produtos - Editar{% endblock %}
+{% block titulo %}Deletar - {{produto.nome}} {% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 
 {% block main %}
-    <h1>Deseja mesmo excluir?</h1>
-    <h2>Produto: {{produto.nome}}</h2>
-    <h3>Categoria: {{ produto.categoria }}</h3>
-    <form action="{% url 'dash_produto_del' produto.id %}" method="POST">
+<div class="container">
+    <div class="row justify-content-md-center mt-4">
+        <h2>Deletar: {{produto.nome}}</h2>
+    </div>
+    <div class=" justify-content-md-center mt-4">
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Quantidade</th>
+                    <th>Preço Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row">{{produto.id}}</td>
+                    <td scope="col">{{produto.nome}}</td>
+                    <td scope="col">{{produto.categoria}}</td>
+                    <td scope="col">{{produto.quantidade}}</td>
+                    <td scope="col">{{produto.valor_pago}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form action="{% url 'dash_produto_del' produto.id %}" method="POST" class="mt-4">
         {% csrf_token %}
-        <button type="submit" >Deletar</button>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="form-control btn btn-danger">Deletar</button>
+            </div>
+            <div class="col">
+                <a href="{% url 'dash_produtos' %}" class="form-control btn btn-primary">Voltar</a>
+            </div>
+        </div>
     </form>
-    <a href="{% url 'dash_produtos' %}">Voltar</a>
+</div>
 {% endblock %}

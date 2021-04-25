@@ -7,6 +7,11 @@ class PedidoForm(forms.ModelForm):
         model = Pedido
         fields = ['cliente','endereco']
 
+        widgets = {
+            'cliente': forms.TextInput(attrs={'class':'form-control','placeholder':'Cliente'}),
+            'endereco': forms.TextInput(attrs={'class':'form-control','placeholder':'Endereço'}),
+        }
+
 
 class ItemPedidoForm(forms.ModelForm):
     class Meta:

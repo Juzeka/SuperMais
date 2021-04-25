@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
 
 {% block titulo %}Categorias{% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 
 {% block main %}
-    <h1>Categorias</h1>
-    <div class="container-fluid">
-        <a href="{% url 'dash_index' %}">Dashboard</a>
-        <a href="{% url 'dash_produtos' %}">Produtos</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>Categorias</h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'dash_index' %}" class="btn btn-primary">Dashboard</a>
+            <a href="{% url 'dash_produtos' %}" class="btn btn-info">Produtos</a>
+        </div>
+
+    </div>
+    <div class="container">
 
         <div class="row justify-content-center">
             <h3>Adicionar nova categoria</h3>
@@ -14,35 +25,40 @@
         <form action="{% url 'dash_nova_categoria' %}" method="POST">
             {% csrf_token %}
             <div class="form-row justify-content-md-center">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
                     <label for="id_nome">Categoria:</label>
                     {{ form.nome}}
                 </div>
-                <button type="submit" class="btn btn-primary">Adcionar</button>
             </div>
+            <button type="submit" class="form-control btn btn-primary">Adcionar</button>
         </form>
+    </div>
     <br>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Categoria</th>
-                <th>Operações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for categoria in categorias %}
+    <div class="table-response">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td><a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.id}}</a></td>
-                    <td><a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.nome}}</a></td>
-                    <td>
-                        <a href="{% url 'dash_categoria_update' categoria.id %}">Editar</a> |
-                        <a href="{% url 'dash_categoria_del' categoria.id %}">Apagar</a>
+                    <th style="text-align: center; vertical-align: middle;">ID</th>
+                    <th style="text-align: center; vertical-align: middle;">Categoria</th>
+                    <th style="text-align: center; vertical-align: middle;">Operações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td scope="row" style="text-align: center; vertical-align: middle;">
+                        <a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.id}}</a></td>
+                    <td scope="col" style="text-align: center; vertical-align: middle;"><a
+                            href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.nome}}</a></td>
+                    <td scope="col" style="text-align: center; vertical-align: middle;">
+                        <a href="{% url 'dash_categoria_update' categoria.id %}" class="btn btn-warning">Alterar</a>
+                        <a href="{% url 'dash_categoria_del' categoria.id %}" class="btn btn-danger">Apagar</a>
                     </td>
 
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
