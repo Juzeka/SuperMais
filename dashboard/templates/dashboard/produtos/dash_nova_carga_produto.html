@@ -9,6 +9,7 @@
 <div class="container mt-4">
 
     <h2>Abastecer o Estoque de: {{produto.nome}} </h2>
+    {% include 'parciais/_menssages.html' %}
     <div class="row mt-4">
         <div class="col">
             <form action="{% url 'dash_nova_carga_produto' produto.id %}" method="POST">

@@ -17,3 +17,9 @@ class ItemPedidoForm(forms.ModelForm):
     class Meta:
         model = ItemPedido
         fields = ['pedido','produto','quantidade']
+
+        widgets ={
+            'pedido': forms.Select(attrs={'class': 'form-control'}),
+            'produto': forms.Select(attrs={'class': 'form-control'}),
+            'quantidade': forms.NumberInput(attrs={'class': 'form-control', 'type':'number','min':'1'}),
+        }

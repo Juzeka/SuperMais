@@ -1,34 +1,67 @@
 {% extends 'base.html' %}
 
 {% block titulo %}Pedidos{% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 
 {% block main %}
-<h1>Pedidos</h1>
+<div class="container-fluid mt-4">
+
+    <div class="row ml-4">
+        <div class="col-12">
+            <h1>Pedidos</h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'dash_index' %}" class="btn btn-primary">Painel Administrativo</a>
+            <a href="{% url 'itens_list' %}" class="btn btn-info">Itens</a>
+        </div>
+        
+    </div>
+</div>
+<br>
 <div class="container-fluid">
-        <a href="{% url 'dash_index' %}">Dashboard</a>
-    <table class="table">
+    {% include 'parciais/_menssages.html' %}
+    <table class="table table-hover">
         <thead>
-            <tr>
-                <th>ID</th>
+            <tr style="text-align: center; vertical-align: middle;">
+                <th >ID</th>
                 <th>Cliente</th>
                 <th>Endereço</th>
                 <th>Pagamento</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for pedido in pedidos %}
-                <tr>
-                    <td><a href="{% url 'pedido_detalhe' pedido.id %}">{{pedido.id}}</a></td>
-                    <td><a href="{% url 'pedido_detalhe' pedido.id %}">{{pedido.cliente}}</a></td>
-                    <td><a href="{% url 'pedido_detalhe' pedido.id %}">{{pedido.endereco}}</a></td>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <td>{{pedido.id}}</td>
+                    <td>{{pedido.cliente}}</td>
+                    <td>{{pedido.endereco}}</td>
                     {% if pedido.pago == True %}
-                    <td>Pago</td>
+                    <td style="color: green;"><strong>Pago</strong></td>
                     {% else %}
-                    <td>Pendente</td>
+                    <td style="color: rgb(128, 0, 0);"><strong>Pendente</strong></td>
                     {% endif %}
+                    <td>
+                        <a href="{% url 'pedido_detalhe' pedido.id %}" class="btn btn-success">Detalhe</a> 
+                        <a href="{% url 'pedido_update' pedido.id %}" class="btn btn-warning">Alterar</a> 
+                        <a href="{% url 'pedido_del' pedido.id %}" class="btn btn-danger">Deletar</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <nav aria-label="Paginação de pedidos">
+        <ul class="pagination">
+            {% for pagina in pedidos.paginator.page_range %}
+            {% if pedidos.number == pagina %}
+            <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+            {%endfor%}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

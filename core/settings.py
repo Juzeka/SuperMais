@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -103,6 +104,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'templates/static')
+]
 
 
 # Default primary key field type
@@ -110,3 +115,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Carrinho de compra
 CARRINHO_SESSION_ID= 'carrinho'
+
+#mensagens
+MESSAGE_TAGS = {
+    constants.SUCCESS: 'alert-success',
+    constants.ERROR: 'alert-danger',
+    constants.WARNING: 'alert-warning',
+    constants.DEBUG: 'alert-primary',
+    constants.INFO: 'alert-info',
+}

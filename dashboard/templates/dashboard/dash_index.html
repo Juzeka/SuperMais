@@ -8,26 +8,24 @@
 
 {% block main %}
 <div class="container">
-    <div class="row">
-        <div class="col">Nº de Pedidos</div>
-        <div class="col">Lucros</div>
+    <div class="row mt-4 mb-4">
+        <div class="col"><span class="indice">Nº de Pedidos</span></div>
+        <div class="col"><span>Lucro</span></div>
     </div>
-</div>
-<div class="container-fluid">
+    {% include 'parciais/_menssages.html' %}
     <div class="row">
         <div class="col">
-            <a href="{% url 'dash_produtos' %}" class="btn btn-primary">Produtos</a>
+            <a href="{% url 'dash_produtos' %}" class="btn dash-bnt" style="background-color: #ff7f50;">Produtos</a>
         </div>
         <div class="col">
-            <a href="{% url 'dash_categorias' %}" class="btn btn-primary">Categorias</a>
+            <a href="{% url 'dash_categorias' %}" class="btn dash-bnt" style="background-color: #ff506d;">Categorias</a>
         </div>
         <div class="col">
-            <a href="{% url 'pedidos_list' %}"class="btn btn-primary">Pedidos</a>
+            <a href="{% url 'pedidos_list' %}" class="btn dash-bnt" style="background-color: #8d50ff;">Pedidos</a>
         </div>
         <div class="col">
-            <a href="{% url 'itens_list' %}"class="btn btn-primary">Itens</a>
+            <a href="{% url 'itens_list' %}" class="btn dash-bnt " style="background-color: #50aaff;">Itens</a>
         </div>
-    
     </div>
 </div>
 

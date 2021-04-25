@@ -11,7 +11,7 @@
     <div class="row justify-content-md-center">
         <h2>Alterar: {{produto.nome}}</h2>
     </div>
-
+    {% include 'parciais/_menssages.html' %}
     <div class="row mt-4">
         <div class="col">
             <form action="{% url 'dash_produto_update' produto.id %}" method="POST">

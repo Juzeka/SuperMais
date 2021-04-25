@@ -7,7 +7,7 @@
 
 {% block main %}
 <div class="container-fluid">
-    <div class="row">
+    <div class="row ml-4">
         <div class="col-12">
             <h1>Categorias</h1>
         </div>
@@ -18,7 +18,7 @@
 
     </div>
     <div class="container">
-
+        {% include 'parciais/_menssages.html' %}
         <div class="row justify-content-center">
             <h3>Adicionar nova categoria</h3>
         </div>
@@ -30,27 +30,25 @@
                     {{ form.nome}}
                 </div>
             </div>
-            <button type="submit" class="form-control btn btn-primary">Adcionar</button>
+            <button type="submit" class="form-control btn btn-success">Adcionar</button>
         </form>
     </div>
     <br>
-    <div class="table-response">
+    <div class="table-response ml-1">
         <table class="table">
             <thead>
-                <tr>
-                    <th style="text-align: center; vertical-align: middle;">ID</th>
-                    <th style="text-align: center; vertical-align: middle;">Categoria</th>
-                    <th style="text-align: center; vertical-align: middle;">Operações</th>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <th>ID</th>
+                    <th>Categoria</th>
+                    <th>Operações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for categoria in categorias %}
-                <tr>
-                    <td scope="row" style="text-align: center; vertical-align: middle;">
-                        <a href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.id}}</a></td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;"><a
-                            href="{% url 'dash_categoria_update' categoria.id %}">{{categoria.nome}}</a></td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">
+                <tr style="text-align: center; vertical-align: middle;">
+                    <td scope="row">{{categoria.id}}</td>
+                    <td scope="col">{{categoria.nome}}</td>
+                    <td scope="col">
                         <a href="{% url 'dash_categoria_update' categoria.id %}" class="btn btn-warning">Alterar</a>
                         <a href="{% url 'dash_categoria_del' categoria.id %}" class="btn btn-danger">Apagar</a>
                     </td>
@@ -60,5 +58,16 @@
             </tbody>
         </table>
     </div>
+    <nav aria-label="Paginação do E-commerce">
+        <ul class="pagination">
+            {% for pagina in categorias.paginator.page_range %}
+            {% if categorias.number == pagina %}
+            <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+            {%endfor%}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

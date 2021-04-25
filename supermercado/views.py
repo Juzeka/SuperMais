@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from dashboard.models import Produto, Categoria
 from carrinho.forms import CarrinhoProdutoForm
@@ -14,6 +15,10 @@ def super_index(request, nome=None):
         nome_cat = get_object_or_404(Categoria, nome=nome)
         produtos = Produto.objects.filter(categoria=nome_cat)
 
+    paginacao = Paginator(produtos, 20)
+    paginas = request.GET.get('p')
+    produtos = paginacao.get_page(paginas)
+    
     contexto['categorias'] = categorias
     contexto['categoria'] = nome_cat
     contexto['produtos'] = produtos

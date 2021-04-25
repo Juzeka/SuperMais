@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from carrinho.carrinho_compra import Carrinho
@@ -18,7 +19,7 @@ def carrinho_add(request, id):
             qntd=data_produto['quantidade'],
             sobrepor_qntd=data_produto['sobrepor_qntd'],
         )
-
+    messages.add_message(request, messages.SUCCESS, 'Produto adicionado!')
     return redirect('carrinho_detalhe')
 
 
@@ -28,6 +29,7 @@ def carrinho_delete(request, id):
     produto = get_object_or_404(Produto, id=id)
 
     carrinho.delete(produto)
+    messages.add_message(request, messages.SUCCESS, 'Produto deletado!')
     return redirect('carrinho_detalhe')
 
 

@@ -11,11 +11,12 @@
     <div class="row">
         <div class="col ml-4">
             <h1>Produtos</h1>
-            <a href="{% url 'dash_index' %}" class="btn btn-primary">Dashboard</a>
-            <a href="{% url 'dash_categorias' %}" class="btn btn-info">Categoria</a>
+            <a href="{% url 'dash_index' %}" class="btn btn-primary">Painel Administrativo</a></h5>
+            <a href="{% url 'dash_categorias' %}" class="btn btn-info">Categorias</a></h5>
         </div>
     </div>
     <div class="container">
+        {% include 'parciais/_menssages.html' %}
         <div class="row justify-content-center">
             <h3>Adicionar novo produto</h3>
         </div>
@@ -48,44 +49,55 @@
     <div class="table-responsive">
         <table class="table ">
             <thead>
-                <tr>
-                    <th style="text-align: center; vertical-align: middle;">ID</th>
-                    <th style="text-align: center; vertical-align: middle;">Produto</th>
-                    <th style="text-align: center; vertical-align: middle;">Categoria</th>
-                    <th style="text-align: center; vertical-align: middle;">Qntd</th>
-                    <th style="text-align: center; vertical-align: middle;">Preço Total</th>
-                    <th style="text-align: center; vertical-align: middle;">Unid.</th>
-                    <th style="text-align: center; vertical-align: middle;">Criado</th>
-                    <th style="text-align: center; vertical-align: middle;">Modificado</th>
-                    <th style="text-align: center; vertical-align: middle;">Disponível</th>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Qntd</th>
+                    <th>Preço Total</th>
+                    <th>Unid.</th>
+                    <th>Criado</th>
+                    <th>Modificado</th>
+                    <th>Disponível</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for produto in produtos %}
-                <tr>
-                    <td scope="row" style="text-align: center; vertical-align: middle;">{{produto.id}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.nome}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.categoria}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.quantidade}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.valor_pago}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.preco_medio}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.data_criada |date:'d/m/y - h:i:s'}}</td>
-                    <td scope="col" style="text-align: center; vertical-align: middle;">{{produto.data_modificacao |date:'d/m/y - h:i:s'}}</td>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <td scope="row" >{{produto.id}}</td>
+                    <td scope="col" >{{produto.nome}}</td>
+                    <td scope="col" >{{produto.categoria}}</td>
+                    <td scope="col" >{{produto.quantidade}}</td>
+                    <td scope="col" >{{produto.valor_pago}}</td>
+                    <td scope="col" >{{produto.preco_medio}}</td>
+                    <td scope="col" >{{produto.data_criada |date:'d/m/y - h:i:s'}}</td>
+                    <td scope="col" >{{produto.data_modificacao |date:'d/m/y - h:i:s'}}</td>
                     {% if produto.status == True  %}
-                    <td scope="col" style="text-align: center; vertical-align: middle;">Sim</td>
+                    <td scope="col">Sim</td>
                     {% else %}
-                    <td scope="col" style="text-align: center; vertical-align: middle;">Não</td>
+                    <td scope="col">Não</td>
                     {% endif %}
-                    <td scope="col" style="text-align: center; vertical-align: middle;">
+                    <td scope="col" >
                         <a href="{% url 'dash_produto_update' produto.id %}" class="btn btn-warning far fa-edit" >Alterar</a>
                         <a href="{% url 'dash_produto_del' produto.id %}" class="btn btn-danger far fa-trash-alt">Deletar</a>
-                        <a href="{% url 'dash_nova_carga_produto' produto.id %}" class="btn btn-info">Abastercer</a>
+                        <a href="{% url 'dash_nova_carga_produto' produto.id %}" class="btn btn-success">Abastercer</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    <nav aria-label="Paginação de pedidos">
+    <ul class="pagination">
+        {% for pagina in produtos.paginator.page_range %}
+            {% if produtos.number == pagina %}
+                <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+                <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+        {%endfor%}
+    </ul>
+</nav>
 </div>
 {% endblock %}
