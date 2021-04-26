@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Painel do usuário{% endblock %}
+
+{% block navbar %}
+{% include 'parciais/_dash_user_header.html' %}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-4">
+
+    {% include 'parciais/_menssages.html' %}
+    <div class="row justify-content-md-center">
+        <div class="col-6">
+            <div class="row justify-content-md-center">
+                <a href="{% url 'dash_user_pedidos' %}" class="btn dash-bnt" style="background-color: #ff7f50;">Meus Pedidos</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

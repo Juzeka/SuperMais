@@ -14,7 +14,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,6 +26,8 @@ INSTALLED_APPS = [
     'carrinho.apps.CarrinhoConfig',
     'supermercado.apps.SupermercadoConfig',
     'pedido.apps.PedidoConfig',
+    'accounts.apps.AccountsConfig',
+    'dashboarduser.apps.DashboarduserConfig',
 ]
 
 MIDDLEWARE = [

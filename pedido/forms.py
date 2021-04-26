@@ -8,7 +8,7 @@ class PedidoForm(forms.ModelForm):
         fields = ['cliente','endereco']
 
         widgets = {
-            'cliente': forms.TextInput(attrs={'class':'form-control','placeholder':'Cliente'}),
+            'cliente': forms.HiddenInput(attrs={'class':'form-control','value':'Cliente'}),
             'endereco': forms.TextInput(attrs={'class':'form-control','placeholder':'Endereço'}),
         }
 
