@@ -1,16 +1,19 @@
 import os
+from dj_database_url import parse as dburl
+from decouple import config
 from pathlib import Path
-
 from django.contrib.messages import constants
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-x2!4m+5wm!s(@sy$c%cxls#tld0v(hfygjp8o2%0bgz4d=6n&@'
 
 
-DEBUG = True
 
-ALLOWED_HOSTS = []
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+
+ALLOWED_HOSTS = ['supermercadosupermais.herokuapp.com']
 
 
 # Application definition
@@ -64,12 +67,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+ 'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
 }
+
 
 
 # Password validation
