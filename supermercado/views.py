@@ -4,6 +4,12 @@ from dashboard.models import Produto, Categoria
 from carrinho.forms import CarrinhoProdutoForm
 
 
+def paginacao(request, model, qnd=10):
+    paginacao = Paginator(model, qnd)
+    paginas = request.GET.get('p')
+    model = paginacao.get_page(paginas)
+    return model
+
 
 def super_index(request, nome=None):
     contexto = {}
@@ -15,9 +21,7 @@ def super_index(request, nome=None):
         nome_cat = get_object_or_404(Categoria, nome=nome)
         produtos = Produto.objects.filter(categoria=nome_cat)
 
-    paginacao = Paginator(produtos, 20)
-    paginas = request.GET.get('p')
-    produtos = paginacao.get_page(paginas)
+    produtos = paginacao(request,produtos,20)
     
     contexto['categorias'] = categorias
     contexto['categoria'] = nome_cat

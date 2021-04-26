@@ -7,7 +7,7 @@
 
 {% block main %}
 <div class="container mt-4">
-
+    {% include 'parciais/_menssages.html' %}
     <h1 class="title-h2">Finalizar Compra</h1>
     {% if carrinho %}
     <div class="row">
@@ -78,5 +78,5 @@
     </div>
     {%endif%}
 </div>
-{% include 'parciais/_menssages.html' %}
+
 {% endblock %}

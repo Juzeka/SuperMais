@@ -14,6 +14,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 ALLOWED_HOSTS = ['supermercadosupermais.herokuapp.com']
+#ALLOWED_HOSTS = []
 
 
 # Application definition

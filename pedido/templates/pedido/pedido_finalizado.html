@@ -6,10 +6,9 @@
 {% endblock %}
 
 {% block main %}
-<div class="container">
-
-    {% if carrinho %}
+<div class="container mt-4">
     {% include 'parciais/_menssages.html' %}
+    {% if carrinho %}
     <div class="row justify-content-center mt-4">
         <h1 class="title-h2">Compra concluída</h1>
     </div>
@@ -43,7 +42,6 @@
             <a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
         </div>
     </div>
-    {% include 'parciais/_menssages.html' %}
     {%endif%}
 </div>
 {% endblock %}
