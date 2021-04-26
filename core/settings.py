@@ -125,3 +125,9 @@ MESSAGE_TAGS = {
     constants.DEBUG: 'alert-primary',
     constants.INFO: 'alert-info',
 }
+
+
+# login
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL ='super_index'
+LOGOUT_REDIRECT_URL ='super_index'

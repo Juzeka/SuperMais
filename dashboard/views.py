@@ -1,5 +1,6 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from dashboard.forms import ProdutoForm, CategoriaForm
@@ -7,8 +8,10 @@ from dashboard.models import Produto, Categoria
 from pedido.forms import PedidoForm, ItemPedidoForm
 from pedido.models import Pedido, ItemPedido
 
-
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_index(request):
+
     return render(request, 'dashboard/dash_index.html')
 
 
@@ -31,7 +34,8 @@ def get_instacia_categoria(request, id):
     return contexto
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_categorias(request):
     contexto = {}
     categorias = Categoria.objects.all().order_by('-id')
@@ -45,7 +49,8 @@ def dash_categorias(request):
     return render(request, 'dashboard/categorias/dash_categorias.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_nova_categoria(request):
     contexto = {}
     form = CategoriaForm(request.POST)
@@ -68,7 +73,8 @@ def dash_nova_categoria(request):
         return render(request, 'dashboard/produtos/dash_produto_detalhes.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_categoria_update(request, id):
     form = get_instacia_categoria(request, id)['form']
 
@@ -84,7 +90,8 @@ def dash_categoria_update(request, id):
                       get_instacia_categoria(request, id))
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_categoria_del(request, id):
     if request.method == 'POST':
         get_instacia_categoria(request, id)['categoria'].delete()
@@ -115,7 +122,8 @@ def get_instacia(request, id):
     return contexto
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_produtos(request):
     contexto = {}
     produtos = Produto.objects.all().order_by('-id')
@@ -129,7 +137,8 @@ def dash_produtos(request):
     return render(request, 'dashboard/produtos/dash_produtos.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_nova_carga_produto(request, id):
     produto = get_instacia(request, id)['produto']
     produto_old = {'id_produto': produto.id, 'id_categoria': produto.categoria.id, 'id_nome': produto.nome,
@@ -158,7 +167,8 @@ def dash_nova_carga_produto(request, id):
         return render(request, 'dashboard/produtos/dash_nova_carga_produto.html', get_instacia(request, id))
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_novo_produto(request):
     contexto = {}
     form = ProdutoForm(request.POST)
@@ -183,7 +193,8 @@ def dash_novo_produto(request):
         return render(request, 'dashboard/produtos/dash_produto_detalhes.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_produto_update(request, id):
     form = get_instacia(request, id)['form']
 
@@ -200,7 +211,8 @@ def dash_produto_update(request, id):
         return render(request, 'dashboard/produtos/dash_produto_detalhes.html', get_instacia(request, id))
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_produto_del(request, id):
     if request.method == 'POST':
         get_instacia(request, id)['produto'].delete()
@@ -211,7 +223,8 @@ def dash_produto_del(request, id):
 
 
 # ---------Itens do pedidos ----------#
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def itens_list(request):
     contexto = {}
     itens = ItemPedido.objects.all().order_by('-id')
@@ -220,7 +233,8 @@ def itens_list(request):
     return render(request, 'dashboard/itens/dash_itens.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def item_detalhe(request, id):
     contexto = {}
     item = get_object_or_404(ItemPedido, id=id)
@@ -229,7 +243,8 @@ def item_detalhe(request, id):
     return render(request, 'dashboard/itens/dash_item_detalhe.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def item_del(request, id):
     item = get_object_or_404(ItemPedido, id=id)
 
@@ -240,7 +255,8 @@ def item_del(request, id):
     return render(request, 'dashboard/itens/dash_item_conf_del.html', {'item': item})
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def item_update(request, id):
     contexto = {}
     item = get_object_or_404(ItemPedido, id=id)
@@ -258,7 +274,8 @@ def item_update(request, id):
 
 
 # ---------Pedidos ----------#
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def pedidos_list(request):
     contexto = {}
     pedidos = Pedido.objects.filter(pago=True).order_by('-id')
@@ -267,7 +284,8 @@ def pedidos_list(request):
     return render(request, 'dashboard/pedidos/dash_pedidos.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def pedido_detalhe(request, id):
     contexto = {}
     pedido = get_object_or_404(Pedido, id=id)
@@ -278,7 +296,8 @@ def pedido_detalhe(request, id):
     return render(request, 'dashboard/pedidos/dash_pedido_detalhe.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def pedido_update(request, id):
     contexto = {}
     pedido = get_object_or_404(Pedido, id=id)
@@ -295,7 +314,8 @@ def pedido_update(request, id):
         return render(request, 'dashboard/pedidos/dash_pedido_update.html', contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def pedido_del(request, id):
     pedido = get_object_or_404(Pedido, id=id)
 

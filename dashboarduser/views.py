@@ -12,12 +12,12 @@ def paginacao(request, model, qnd=10):
     return model
 
 
-@login_required(redirect_field_name='login')
+@login_required()
 def dash_user_index(request):
     return render(request,'dashboarduser/dash_user_index.html')
 
 
-@login_required(redirect_field_name='login')
+@login_required()
 def dash_user_pedidos(request):
     contexto ={}
     pedidos= Pedido.objects.filter(cliente= auth(request).get('user')).order_by('-id')
@@ -27,7 +27,7 @@ def dash_user_pedidos(request):
     return render(request,'dashboarduser/dash_user_pedidos.html',contexto)
 
 
-@login_required(redirect_field_name='login')
+@login_required()
 def dash_user_pedido_detalhe(request,id):
     contexto ={}
     pedido= get_object_or_404(Pedido, id=id)
