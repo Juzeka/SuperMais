@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
 
 {% block titulo %}Produtos - Editar{% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 
 {% block main %}
-    <h1>Abastecimento de Produto </h1>
-    <h2>Produto: {{produto.nome}}</h2>
-    <h3>Categoria: {{produto.categoria}}</h3>
+<div class="container mt-4">
 
-    <form action="{% url 'dash_nova_carga_produto' produto.id %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit" class="btn btn-info">Abastecer</button>
-        <a href="{% url 'dash_produtos' %}" class="btn btn-secondary">Voltar</a>
-    </form>
+    <h2>Abastecer o Estoque de: {{produto.nome}} </h2>
+    {% include 'parciais/_menssages.html' %}
+    <div class="row mt-4">
+        <div class="col">
+            <form action="{% url 'dash_nova_carga_produto' produto.id %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group col-md-12 mb-2">
+                    {{ form }}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="form-control btn btn-info">Abastecer</button>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'dash_produtos' %}" class="form-control btn btn-primary">Voltar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

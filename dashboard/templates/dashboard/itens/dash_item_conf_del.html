@@ -1,14 +1,43 @@
 {% extends 'base.html' %}
 
 {% block titulo %}Pedido - Editar{% endblock %}
-
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
 {% block main %}
-    <h1>Deseja mesmo excluir?</h1>
-    <h2>Pedido: {{item.pedido}}</h2>
-    <h3>Produto: {{ item.produto }}</h3>
-    <form action="{% url 'item_del' item.id %}" method="POST">
-        {% csrf_token %}
-        <button type="submit" >Deletar</button>
-    </form>
-    <a href="{% url 'itens_list' %}">Voltar</a>
+<div class="container">
+    {% include 'parciais/_menssages.html' %}
+    <div class="row justify-content-md-center mt-4">
+        <h1>Deletar {{item.produto}} de: {{item.pedido}}</h1>
+    </div>
+    <div class=" justify-content-md-center mt-4">
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="text-align: center; vertical-align: middle;">
+                    <td scope="row">{{item.id}}</td>
+                    <td scope="col">{{item.produto}}</td>
+                    <td scope="col">{{item.quantidade}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <form action="{% url 'item_del' item.id %}" method="POST" class="mt-4">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="form-control btn btn-danger">Deletar</button>
+                </div>
+                <div class="col">
+                    <a href="{% url 'itens_list' %}" class="form-control btn btn-primary">Voltar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

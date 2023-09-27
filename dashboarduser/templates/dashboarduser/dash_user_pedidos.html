@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Pedidos{% endblock %}
+{% block navbar %}
+{% include 'parciais/_dash_user_header.html' %}
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid mt-4">
+
+    <div class="row ml-4">
+        <div class="col-12">
+            <h1>Meus pedidos</td></h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'dash_user_index' %}" class="btn btn-primary">Voltar</a>
+        </div>
+
+    </div>
+</div>
+<br>
+<div class="container-fluid">
+    {% include 'parciais/_menssages.html' %}
+    {% if pedidos %}
+    <table class="table table-hover">
+        <thead>
+            <tr style="text-align: center; vertical-align: middle;">
+                <th>Pedido</th>
+                <th>Endereço</th>
+                <th>Pagamento</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                <tr style="text-align: center; vertical-align: middle;">
+                    <td>{{pedido}}</td>
+                    <td>{{pedido.endereco}}</td>
+                    {% if pedido.pago == True %}
+                    <td style="color: green;"><strong>Pago</strong></td>
+                    {% else %}
+                    <td style="color: rgb(128, 0, 0);"><strong>Pendente</strong></td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'dash_user_pedido_detalhe' pedido.id %}" class="btn btn-success">Detalhe</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <nav aria-label="Paginação de pedidos" class="ml-4">
+        <ul class="pagination">
+            {% for pagina in pedidos.paginator.page_range %}
+            {% if pedidos.number == pagina %}
+            <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+            {%endfor%}
+        </ul>
+    </nav>
+    {%else%}
+    <div class="row justify-content-md-center mt-4">
+        <h1>Você não tem pedidos</h1>
+    </div>
+    {%endif%}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark2">
+    <a class="navbar-brand" href="{% url 'super_index' %}"><img src="{% static 'img/logo.png' %}" alt="SuperMais"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li style="color: #9db97b ;">Painel Administrativo do Usuário</li>
+        </ul>
+        <span class="navbar-text">
+            <div class="dropdown text-dash">
+
+                <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Bem vindo | {{user}}
+                </a>
+                <div class="dropdown-menu text-dash" aria-labelledby="navbarDropdown">
+                    <span class="dropdown-item">{{user}}</span>
+                    <div class="dropdown-divider"></div>
+                    {% if user.is_staff == True %}
+                    <a class="dropdown-item " href="{% url 'novo_usuario' %}">Sing up</a>
+                    {% endif %}
+                    <a class="dropdown-item " href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+        </span>
+    </div>
+</nav>

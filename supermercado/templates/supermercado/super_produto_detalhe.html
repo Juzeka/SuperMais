@@ -1,40 +1,59 @@
 {% extends 'base.html' %}
 
 {% block titulo %}SuperMais{% endblock %}
+{% block navbar %}
+{% include 'parciais/_super_header.html' %}
+{% endblock %}
 
 {% block main %}
-    <h1>SuperMais</h1>
-
-<div class="container">
+<div class="container mt-4">
+    {% include 'parciais/_menssages.html' %}
     <div class="row">
-            <div class="col-12">
-
-            <h2>Produto</h2>
-            </div>
-
-            <div class="col-12">
-                <div class="card mb-2 mt-2" style="width: 30 rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{produto.nome}}</h5>
-                        <span class="card-title">{{produto.categoria}}</span>
-                        <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
-                        <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
-                    </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 mt-4">
+                    <h1 class="title-h2">{{produto.nome}}</h1>
+                </div>
+                <div class="col-12"><h3 class="title-h2">{{produto.categoria}}</h3></div>
+                <div class="col-12 text-p"><h1>R$ {{produto.preco_medio}}</h1></div>
+                <div class="col-12"><span class="small"><strong>{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</strong></span></div>
+                <div class="col">
                     {% if produto.status == False%}
-                    <form action="{% url 'carrinho_add' produto.id %}" method="POST">
-                        {% csrf_token %}
-                        {{ carrinho_form }}
-                        <input type="submit" class="btn btn-primary disabled" hidden value="Adicionar ao carrinho">
-                    </form>
+                    <div class="row">
+                        <form action="{% url 'carrinho_add' produto.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="col-6 mt-1">
+                                <div class="row">
+                                    <div class="col text-p">Quantidade</div>
+                                    <div class="col">{{ carrinho_form.quantidade }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 mt-1">
+                                <input type="submit" class="form-control btn btn-success" hidden
+                                    value="Adicionar ao carrinho">
+                            </div>
+                        </form>
+                    </div>
                     {%else%}
-                    <form action="{% url 'carrinho_add' produto.id %}" method="POST">
-                        {% csrf_token %}
-                        {{ carrinho_form }}
-                        <input type="submit" class="btn btn-primary" value="Adicionar ao carrinho">
-                    </form>
+                    <div class="row">
+                        <form action="{% url 'carrinho_add' produto.id %}" method="POST">
+                            <div class="col mt-1">
+                                {% csrf_token %}
+                                <div class="row ">
+                                    <div class="col">Quantidade</div>
+                                    <div class="col form-group">{{ carrinho_form.quantidade }}</div>
+                                </div>
+                            </div>
+                            <div class="col mt-1">
+                                <input type="submit" class="form-control btn btn-success" value="Adicionar ao carrinho">
+                            </div>
+                        </form>
+                    </div>
                     {%endif%}
                 </div>
             </div>
+
+        </div>
     </div>
 </div>
 {% endblock %}

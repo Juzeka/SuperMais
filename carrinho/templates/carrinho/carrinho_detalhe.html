@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block titulo %}Carrinho{% endblock %}
-
+{% block navbar %}
+{% include 'parciais/_super_header.html' %}
+{% endblock %}
 {% block main %}
-<h1>Carrinho</h1>
-{% if carrinho %}
-     <table class="table">
+<div class="container mt-4">
+
+    <h1 class="title-h2">Meu Carrinho</h1>
+    {% include 'parciais/_menssages.html' %}
+    {% if carrinho %}
+    <table class="table">
         <thead>
             <tr>
                 <th>Produto</th>
@@ -13,48 +18,65 @@
                 <th>Preço Und.</th>
                 <th>Preço Total</th>
                 <th></th>
-
-
             </tr>
         </thead>
         <tbody>
             {% for item in carrinho %}
-                {% with produto=item.produto %}
-                <tr>
-                    <td>{{produto.nome}}</td>
-                    <td>
-                        <form method="POST" action="{% url 'carrinho_add' produto.id %}">
-                            {% csrf_token %}
-                            {{item.update_qnd.quantidade}}
-                            {{item.update_qnd.sobrepor_qntd}}
-                            <input type="submit" value="Atualizar">
-                        </form>
-                    </td>
+            {% with produto=item.produto %}
+            <tr>
+                <td>{{produto.nome}}</td>
+                <td>
+                    <form method="POST" action="{% url 'carrinho_add' produto.id %}">
+                        {% csrf_token %}
+                        {{item.update_qnd.quantidade}}
+                        {{item.update_qnd.sobrepor_qntd}}
+                        <input type="submit" value="Atualizar" class="btn btn-secondary">
+                    </form>
+                </td>
 
-                    <td class="">R${{ item.preco_medio }}</td>
-                    <td class="">R${{ item.preco_total }}</td>
-                    <td class="">
-                        <form action="{% url 'carrinho_delete' produto.id  %}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Remover">
-                        </form>
-                    </td>
-                </tr>
-                {% endwith %}
+                <td class="">R${{ item.preco_medio }}</td>
+                <td class="">R${{ item.preco_total }}</td>
+                <td class="">
+                    <form action="{% url 'carrinho_delete' produto.id  %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Remover" class="btn btn-danger">
+                    </form>
+                </td>
+            </tr>
+            {% endwith %}
             {% endfor %}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td>R$ {{ carrinho.get_preco_total }}</td>
-                    <td></td>
-                </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><strong>Total</strong></td>
+                <td>R$ {{ carrinho.get_preco_total }}</td>
+                <td></td>
+            </tr>
         </tbody>
     </table>
-<a href="{% url 'super_index' %}" class="btn btn-primary">Continuar Comprando</a>
-<a href="{% url 'finalizar_pedido' %}" class="btn btn-success {% if not carrinho %}disabled{%endif%} ">Finalizar Compra</a>
-{%else%}
-<h1>Carrinho está vazio!</h1>
-<a href="{% url 'super_index' %}" class="btn btn-primary">Volte para comprar</a>
-{%endif%}
+    <div class="row">
+
+        <div class="col">
+            <a href="{% url 'super_index' %}" class="form-control btn btn-primary">Continuar Comprando</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'finalizar_pedido' %}" class="form-control btn btn-success">Finalizar Compra</a>
+        </div>
+
+    </div>
+    {%else%}
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <h1>Carrinho vazio!</h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'super_index' %}" class="form-control btn btn-primary">Continuar Comprando</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'finalizar_pedido' %}"
+                class="form-control btn btn-success {% if not carrinho %}disabled{%endif%} ">Finalizar Compra</a>
+        </div>
+    </div>
+    {%endif%}
+</div>
 {% endblock %}

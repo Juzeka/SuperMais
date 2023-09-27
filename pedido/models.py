@@ -21,7 +21,7 @@ class ItemPedido(models.Model):
     pedido = models.ForeignKey(Pedido,related_name='pedidos',on_delete=models.CASCADE, verbose_name='Pedido')
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, verbose_name='Produto')
     preco = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Preço')
-    quantidade = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(settings.CARRINHO_SESSION_ID),])
+    quantidade = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100),])
 
 
     def get_total_preco(self):

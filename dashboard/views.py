@@ -1,16 +1,29 @@
+from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from dashboard.forms import ProdutoForm, CategoriaForm
 from dashboard.models import Produto, Categoria
 from pedido.forms import PedidoForm, ItemPedidoForm
 from pedido.models import Pedido, ItemPedido
 
-
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_index(request):
+
     return render(request, 'dashboard/dash_index.html')
 
 
-#---------Categoria----------#
-def get_instacia_categoria(request,id):
+def paginacao(request, model, qnd=10):
+    paginacao = Paginator(model, qnd)
+    paginas = request.GET.get('p')
+    model = paginacao.get_page(paginas)
+    return model
+
+
+# ---------Categoria----------#
+def get_instacia_categoria(request, id):
     contexto = {}
     categoria = get_object_or_404(Categoria, id=id)
     form = CategoriaForm(request.POST or None, instance=categoria)
@@ -21,12 +34,14 @@ def get_instacia_categoria(request,id):
     return contexto
 
 
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_categorias(request):
     contexto = {}
     categorias = Categoria.objects.all().order_by('-id')
     form = ProdutoForm(request.POST)
 
-    contexto['categorias'] = categorias
+    contexto['categorias'] = paginacao(request, categorias)
     if request.method != 'POST':
         contexto['form'] = form
         return render(request, 'dashboard/categorias/dash_categorias.html', contexto)
@@ -34,6 +49,8 @@ def dash_categorias(request):
     return render(request, 'dashboard/categorias/dash_categorias.html', contexto)
 
 
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_nova_categoria(request):
     contexto = {}
     form = CategoriaForm(request.POST)
@@ -46,16 +63,19 @@ def dash_nova_categoria(request):
         if nome_categoria_check == False:
             if form.is_valid():
                 form.save()
+                messages.add_message(request, messages.SUCCESS, 'Categoria cadastrada!')
                 return redirect('dash_categorias')
         else:
-            print('ERRO: ja exite, recomentdo que ultilize a opção ABASTECER')
+            messages.add_message(request, messages.WARNING, 'Categoria já existe!')
             return redirect('dash_categorias')
 
     else:
         return render(request, 'dashboard/produtos/dash_produto_detalhes.html', contexto)
 
 
-def dash_categoria_update(request,id):
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def dash_categoria_update(request, id):
     form = get_instacia_categoria(request, id)['form']
 
     if request.method == 'POST':
@@ -63,25 +83,27 @@ def dash_categoria_update(request,id):
             form_update = form.save(commit=False)
             form_update.nome = str(form_update.nome).upper()
             form_update.save()
+            messages.add_message(request, messages.SUCCESS, 'Categoria alterada!')
             return redirect('dash_categorias')
     else:
-        return render(request, 'dashboard/categorias/dash_categoria_detalhes.html', get_instacia_categoria(request, id))
+        return render(request, 'dashboard/categorias/dash_categoria_detalhes.html',
+                      get_instacia_categoria(request, id))
 
 
-def dash_categoria_del(request,id):
-
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def dash_categoria_del(request, id):
     if request.method == 'POST':
         get_instacia_categoria(request, id)['categoria'].delete()
+        messages.add_message(request, messages.SUCCESS, 'Categoria deletada!')
         return redirect('dash_categorias')
     else:
-        return render(request, 'dashboard/categorias/dash_categoria_conf_del.html', get_instacia_categoria(request, id))
+        return render(request, 'dashboard/categorias/dash_categoria_conf_del.html',
+                      get_instacia_categoria(request, id))
 
 
-
-
-#----------Progutos-------------#
+# ----------Produtos-------------#
 def calc_vl_medio(request):
-
     rq_quantidade = request.POST.get('quantidade')
     rq_valor_medio = request.POST.get('valor_pago')
     calc_valor_medio = float(rq_valor_medio) / float(rq_quantidade)
@@ -89,7 +111,7 @@ def calc_vl_medio(request):
     return calc_valor_medio
 
 
-def get_instacia(request,id):
+def get_instacia(request, id):
     contexto = {}
     produto = get_object_or_404(Produto, id=id)
     form = ProdutoForm(request.POST or None, instance=produto)
@@ -100,25 +122,31 @@ def get_instacia(request,id):
     return contexto
 
 
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_produtos(request):
     contexto = {}
     produtos = Produto.objects.all().order_by('-id')
     form = ProdutoForm(request.POST)
 
-    contexto['produtos'] = produtos
+    contexto['produtos'] = paginacao(request, produtos)
     if request.method != 'POST':
         contexto['form'] = form
         return render(request, 'dashboard/produtos/dash_produtos.html', contexto)
 
     return render(request, 'dashboard/produtos/dash_produtos.html', contexto)
 
-def dash_nova_carga_produto(request,id):
-    produto = get_instacia(request,id)['produto']
-    produto_old = {'id_produto':produto.id,'id_categoria':produto.categoria.id, 'id_nome':produto.nome, 'id_quantidade':produto.quantidade, 'id_valor_pago':produto.valor_pago}
-    form = get_instacia(request,id)['form']
 
-    rs_nome=request.POST.get('nome')
-    rs_categoria=request.POST.get('categoria')
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def dash_nova_carga_produto(request, id):
+    produto = get_instacia(request, id)['produto']
+    produto_old = {'id_produto': produto.id, 'id_categoria': produto.categoria.id, 'id_nome': produto.nome,
+                   'id_quantidade': produto.quantidade, 'id_valor_pago': produto.valor_pago}
+    form = get_instacia(request, id)['form']
+
+    rs_nome = request.POST.get('nome')
+    rs_categoria = request.POST.get('categoria')
 
     if request.method == 'POST':
         if rs_nome == produto_old['id_nome'] and int(rs_categoria) == produto_old['id_categoria']:
@@ -126,27 +154,29 @@ def dash_nova_carga_produto(request,id):
                 nova_carga = form.save(commit=False)
                 nova_carga.quantidade += produto_old['id_quantidade']
                 nova_carga.valor_pago += produto_old['id_valor_pago']
-                nova_carga.preco_medio =nova_carga.valor_pago / nova_carga.quantidade
+                nova_carga.preco_medio = nova_carga.valor_pago / nova_carga.quantidade
                 nova_carga.status = True
                 nova_carga.save()
+
+                messages.add_message(request, messages.SUCCESS, 'Produto Abastecido!')
                 return redirect('dash_produtos')
         else:
-            #menssagem de error
-            print('Categoria e Nome do produto não pode ser alterado')
-            return render(request,'dashboard/produtos/dash_nova_carga_produto.html',get_instacia(request,id))
+            messages.add_message(request, messages.WARNING, 'Categoria e Nome do produto não pode ser alterado!')
+            return render(request, 'dashboard/produtos/dash_nova_carga_produto.html', get_instacia(request, id))
     else:
-        print('else')
-        return render(request,'dashboard/produtos/dash_nova_carga_produto.html',get_instacia(request,id))
+        return render(request, 'dashboard/produtos/dash_nova_carga_produto.html', get_instacia(request, id))
 
 
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def dash_novo_produto(request):
-    contexto= {}
+    contexto = {}
     form = ProdutoForm(request.POST)
-    contexto['form']= form
+    contexto['form'] = form
 
     if request.method == 'POST':
         rs_nome = str(request.POST.get('nome')).upper()
-        nome_produto_check =Produto.objects.filter(nome=rs_nome).exists()
+        nome_produto_check = Produto.objects.filter(nome=rs_nome).exists()
 
         if nome_produto_check == False:
             if form.is_valid():
@@ -154,16 +184,18 @@ def dash_novo_produto(request):
                 form_data.nome = rs_nome
                 form_data.preco_medio = calc_vl_medio(request)
                 form_data.save()
-                print('Salvei pq nao exite nenhum produto com esse nome')
+                messages.add_message(request, messages.SUCCESS, 'Produto cadastrado!')
                 return redirect('dash_produtos')
         else:
-            print('ERRO: ja exite, recomentdo que ultilize a opção ABASTECER')
+            messages.add_message(request, messages.WARNING, 'Produto já existente! Recomendo que Abasteça!')
             return redirect('dash_produtos')
     else:
         return render(request, 'dashboard/produtos/dash_produto_detalhes.html', contexto)
 
 
-def dash_produto_update(request,id):
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def dash_produto_update(request, id):
     form = get_instacia(request, id)['form']
 
     if request.method == 'POST':
@@ -171,59 +203,62 @@ def dash_produto_update(request,id):
             form_update = form.save(commit=False)
             form_update.nome = str(form_update).upper()
             form_update.preco_medio = calc_vl_medio(request)
+            form_update.status = True
             form_update.save()
+            messages.add_message(request, messages.SUCCESS, 'Produto Alterado!')
             return redirect('dash_produtos')
     else:
-        return render(request, 'dashboard/produtos/dash_produto_detalhes.html', get_instacia(request,id))
+        return render(request, 'dashboard/produtos/dash_produto_detalhes.html', get_instacia(request, id))
 
 
-def dash_produto_del(request,id):
-
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def dash_produto_del(request, id):
     if request.method == 'POST':
-        get_instacia(request,id)['produto'].delete()
+        get_instacia(request, id)['produto'].delete()
+        messages.add_message(request, messages.SUCCESS, 'Produto deletado!')
         return redirect('dash_produtos')
     else:
-        return render(request,'dashboard/produtos/dash_produto_conf_del.html',get_instacia(request,id))
+        return render(request, 'dashboard/produtos/dash_produto_conf_del.html', get_instacia(request, id))
 
 
-# ---------Pedidos ----------#
-
-def pedidos_list(request):
-    contexto = {}
-    pedidos = Pedido.objects.filter(pago=True).order_by('-id')
-
-    contexto['pedidos'] = pedidos
-    return render(request, 'dashboard/pedidos/dash_pedidos.html',contexto)
-
-
+# ---------Itens do pedidos ----------#
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def itens_list(request):
     contexto = {}
     itens = ItemPedido.objects.all().order_by('-id')
 
-    contexto['itens'] = itens
-    return render(request, 'dashboard/itens/dash_itens.html',contexto)
+    contexto['itens'] = paginacao(request, itens)
+    return render(request, 'dashboard/itens/dash_itens.html', contexto)
 
 
-def item_detalhe(request,id):
-    contexto={}
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def item_detalhe(request, id):
+    contexto = {}
     item = get_object_or_404(ItemPedido, id=id)
 
     contexto['item'] = item
-    return render(request,'dashboard/itens/dash_item_detalhe.html',contexto)
+    return render(request, 'dashboard/itens/dash_item_detalhe.html', contexto)
 
 
-def item_del(request,id):
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def item_del(request, id):
     item = get_object_or_404(ItemPedido, id=id)
 
     if request.method == 'POST':
         item.delete()
+        messages.add_message(request, messages.SUCCESS, 'Item deletado!')
         return redirect('itens_list')
+    return render(request, 'dashboard/itens/dash_item_conf_del.html', {'item': item})
 
-    return render(request,'dashboard/itens/dash_item_conf_del.html',{'item':item})
 
-
-def item_update(request,id):
-    contexto ={}
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def item_update(request, id):
+    contexto = {}
     item = get_object_or_404(ItemPedido, id=id)
     form = ItemPedidoForm(request.POST or None, instance=item)
 
@@ -232,11 +267,25 @@ def item_update(request,id):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, 'Item cadastrado!')
             return redirect('pedidos_list')
     else:
-        return render(request,'dashboard/itens/dash_item_update.html', contexto)
+        return render(request, 'dashboard/itens/dash_item_update.html', contexto)
 
 
+# ---------Pedidos ----------#
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def pedidos_list(request):
+    contexto = {}
+    pedidos = Pedido.objects.filter(pago=True).order_by('-id')
+
+    contexto['pedidos'] = paginacao(request, pedidos)
+    return render(request, 'dashboard/pedidos/dash_pedidos.html', contexto)
+
+
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
 def pedido_detalhe(request, id):
     contexto = {}
     pedido = get_object_or_404(Pedido, id=id)
@@ -244,11 +293,13 @@ def pedido_detalhe(request, id):
 
     contexto['pedido'] = pedido
     contexto['itens'] = pedido_itens
-    return render(request,'dashboard/pedidos/dash_pedido_detalhe.html',contexto)
+    return render(request, 'dashboard/pedidos/dash_pedido_detalhe.html', contexto)
 
 
-def pedido_update(request,id):
-    contexto ={}
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def pedido_update(request, id):
+    contexto = {}
     pedido = get_object_or_404(Pedido, id=id)
     form = PedidoForm(request.POST or None, instance=pedido)
 
@@ -257,18 +308,20 @@ def pedido_update(request,id):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, 'Item alterado!')
             return redirect('pedidos_list')
     else:
-        return render(request,'dashboard/pedidos/dash_pedido_update.html', contexto)
+        return render(request, 'dashboard/pedidos/dash_pedido_update.html', contexto)
 
 
-def pedido_del(request,id):
+@login_required()
+@permission_required(perm='foo.view_bar', login_url='dash_index',raise_exception=True)
+def pedido_del(request, id):
     pedido = get_object_or_404(Pedido, id=id)
 
     if request.method == 'POST':
         pedido.delete()
+        messages.add_message(request, messages.SUCCESS, 'Pedido deletado!')
         return redirect('pedidos_list')
 
-    return render(request,'dashboard/pedidos/dash_pedido_conf_del.html',{'pedido':pedido})
-
-
+    return render(request, 'dashboard/pedidos/dash_pedido_conf_del.html', {'pedido': pedido})

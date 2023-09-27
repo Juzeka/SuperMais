@@ -2,53 +2,78 @@
 
 {% block titulo %}SuperMais{% endblock %}
 
+{% block navbar %}
+{% include 'parciais/_super_index_header.html' %}
+{% endblock %}
+
+
 {% block main %}
-    <h1>SuperMais</h1>
-<h3>Categorias</h3>
-    <ul>
-        <li>
-            <a class="{% if not categoria%}disabled{%endif%}" href="{% url 'super_index' %}">Todas</a>
-        </li>
-        {% for cat in categorias %}
-        <li>
-            <a class="{% if categoria == cat.nome%}disabled{%endif%}" href="{% url 'super_index' cat.nome %}">{{cat.nome}}</a>
-        </li>
-        {% endfor %}
-    </ul>
-
-<form action="" method="POST">
-    {% csrf_token %}
-    <a href="{% url 'carrinho_detalhe' %}">Meu carrinh</a>
-</form>
-<div class="container">
+<div class="container mt-4">
+    {% include 'parciais/_menssages.html' %}
+    <div class="row mt-1">
+        <div class="col-12">
+            <h2 class="title-h2 h2">Sobre nós</h2>
+        </div>
+        <div class="col-12">
+            <p class="text-p">
+                Somos a rede de supermercado SuperMais, interdum diam sit amet laoreet. In eget laoreet arcu, in feugiat
+                est. Class aptent
+                taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum convallis
+                pretium dolor, eu fringilla augue auctor in. In hac habitasse platea dictumst. Praesent ac ultrices
+                velit, in placerat ipsum. Praesent a nisl at risus maximus faucibus. Praesent sagittis sapien nec ex
+                laoreet, id ultrices sem consequat. In sit amet lorem leo. Aenean ac urna nisi. Sed consequat leo eu
+                risus ullamcorper blandit. Cras vehicula, mauris sit amet porta vehicula, mi tellus hendrerit neque,
+                ultrices vestibulum sem metus ac odio. Phasellus accumsan scelerisque ornare. Morbi fringilla, arcu sed
+                accumsan varius, neque diam dapibus est, at vehicula leo tortor id mi. Aenean ullamcorper augue et justo
+                fringilla eleifend. Quisque purus odio, blandit id feugiat facilisis, venenatis in turpis.
+            </p>
+        </div>
+    </div>
     <div class="row">
-            <div class="col-12">
+        <div class="col-12">
+            <h2 class="title-h2 h2">{% if categoria %}{{categoria.nome}}{%else%}Produtos{%endif%}</h2>
+        </div>
 
-            <h2>{% if categoria %}{{categoria.nome}}{%else%}Produtos{%endif%}</h2>
-            </div>
-            {% for produto in produtos %}
-            <div class="col-4">
-                <div class="card mb-2 mt-2" style="width: 22 rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{produto.nome}}</h5>
-                        <span class="card-title">{{produto.categoria}}</span>
-                        <p class="card-text">Preço: <strong>{{produto.preco_medio}}</strong> Reais</p>
-                        <p class="card-text"><small class="text-muted">{% if produto.status == True%}Disponível{%else%}Indisponível{%endif%}</small></p>
-                    </div>
+        {% for produto in produtos %}
+        <div class="col  mt-2 mb-2">
+            <div class="card" style="width: 21rem;">
+
+                <div class="card-body">
+                    <h4 class="card-title">{{produto.nome}}</h4>
+                    <h5 class="card-title">{{produto.categoria}}</h5>
+                    <p class="card-text"><strong>Preço: R$ {{produto.preco_medio}}</strong></p>
+                    {% if produto.status == True %}
+                    <span class="small dis">Disponível</span>
+                    {% else %}
+                    <span class="small inds">Indisponível</span>
+                    {%endif%}
+                    </p>
                     {% if produto.status == False%}
                     <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" class="btn btn-primary disabled" hidden value="Comprar">
+                        <input type="submit" class="form-control btn btn-primary2 disabled" hidden value="Comprar">
                     </form>
                     {%else%}
                     <form action="{% url 'super_produto_detalhe' produto.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="submit" class="btn btn-primary" value="Comprar">
+                        <input type="submit" class="form-control btn btn-primary2" value="Comprar">
                     </form>
                     {%endif%}
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
     </div>
+    <nav aria-label="Paginação do E-commerce">
+        <ul class="pagination">
+            {% for pagina in produtos.paginator.page_range %}
+            {% if produtos.number == pagina %}
+            <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+            {%endfor%}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

@@ -7,8 +7,8 @@ from .forms import CarrinhoProdutoForm
 
 class Carrinho(object):
 
-
     def __init__(self, request):
+
         self.session =request.session
 
         carrinho = self.session.get(settings.CARRINHO_SESSION_ID)
@@ -56,6 +56,7 @@ class Carrinho(object):
         self.carrinho[produto_id]['qntd'] = min(50,self.carrinho[produto_id]['qntd'])# limintando a 50
 
         self.save()
+
 
 
     def save(self):

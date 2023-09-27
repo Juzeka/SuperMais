@@ -1,29 +1,47 @@
 {% extends 'base.html' %}
 
-{% block titulo %}Campra Concluída{% endblock %}
+{% block titulo %}Compra Concluída{% endblock %}
+{% block navbar %}
+{% include 'parciais/_super_header.html' %}
+{% endblock %}
 
 {% block main %}
-{% if carrinho %}
-<h1>Campra Efetuada com Sucesso</h1>
-<div class="row">
-    <div class="col-6">
-        <ul>
-            {% for item in carrinho %}
-            <li>
-                {{ item.qntd }} X {{ item.produto.nome }}
-                <span>R$ {{ item.preco_total }}</span>
-            </li>
-            {%endfor%}
-            <li>{{ carrinho.get_preco_total }}</li>
-        </ul>
+<div class="container mt-4">
+    {% include 'parciais/_menssages.html' %}
+    {% if carrinho %}
+    <div class="row justify-content-center mt-4">
+        <h1 class="title-h2">Compra concluída</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="row justify-content-center">
 
+                {% for item in carrinho %}
+                <div class="col-12 mb-4">
+
+                    {{ item.qntd }} X {{ item.produto.nome }}
+                    <span>Subetotal: R${{ item.preco_total }}</span>
+                </div>
+                {%endfor%}
+                <div class="col-12 mb-3">
+                    <span>Total: R${{ carrinho.get_preco_total }}</span>
+                </div>
+            
+            </div>
+        </div>
+        <div class="col-12">
+            <a href="{% url 'super_index' %}" class="form-control btn btn-primary">Comprar Novamente</a>
+        </div>
     </div>
-    <div class="col-12">
-        <a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
+    {%else%}
+    <div class="row mt-4">
+        <div class="col-12">
+            <h1 class="title-h2">Carrinho está vazio!</h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
+        </div>
     </div>
+    {%endif%}
 </div>
-{%else%}
-<h1>Carrinho está vazio!</h1>
-<a href="{% url 'super_index' %}" class="btn btn-primary">Comprar Novamente</a>
-{%endif%}
 {% endblock %}

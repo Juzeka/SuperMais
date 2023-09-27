@@ -1,19 +1,23 @@
 import os
+from dj_database_url import parse as dburl
+from decouple import config
 from pathlib import Path
+from django.contrib.messages import constants
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-x2!4m+5wm!s(@sy$c%cxls#tld0v(hfygjp8o2%0bgz4d=6n&@'
 
 
-DEBUG = True
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ALLOWED_HOSTS = []
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+
+ALLOWED_HOSTS = ['supermercadosupermais.herokuapp.com']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,6 +30,8 @@ INSTALLED_APPS = [
     'carrinho.apps.CarrinhoConfig',
     'supermercado.apps.SupermercadoConfig',
     'pedido.apps.PedidoConfig',
+    'accounts.apps.AccountsConfig',
+    'dashboarduser.apps.DashboarduserConfig',
 ]
 
 MIDDLEWARE = [
@@ -62,12 +68,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+ 'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
 }
+
 
 
 # Password validation
@@ -103,6 +108,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'templates/static')
+]
 
 
 # Default primary key field type
@@ -110,3 +119,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Carrinho de compra
 CARRINHO_SESSION_ID= 'carrinho'
+
+#mensagens
+MESSAGE_TAGS = {
+    constants.SUCCESS: 'alert-success',
+    constants.ERROR: 'alert-danger',
+    constants.WARNING: 'alert-warning',
+    constants.DEBUG: 'alert-primary',
+    constants.INFO: 'alert-info',
+}
+
+
+# login
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL ='super_index'
+LOGOUT_REDIRECT_URL ='super_index'

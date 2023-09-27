@@ -2,32 +2,61 @@
 
 {% block titulo %}Itens{% endblock %}
 
+{% block navbar %}
+{% include 'parciais/_dash_header.html' %}
+{% endblock %}
+
 {% block main %}
-<h1>Itens</h1>
-<div class="container-fluid">
-        <a href="{% url 'dash_index' %}">Dashboard</a>
-    <table class="table">
+<div class="container-fluid mt-4">
+    <div class="row ml-4">
+        <div class="col-12">
+            <h1>Itens</h1>
+        </div>
+        <div class="col">
+            <a href="{% url 'dash_index' %}" class="btn btn-primary">Painel Administrativo</a>
+            <a href="{% url 'pedidos_list' %}" class="btn btn-info">Pedidos</a>
+        </div>
+    </div>
+    <br>
+    {% include 'parciais/_menssages.html' %}
+    <table class="table table-hover">
         <thead>
-            <tr>
+            <tr style="text-align: center; vertical-align: middle;">
                 <th>ID</th>
                 <th>Cliente</th>
                 <th>Endereço</th>
-                <th>preco</th>
-                <th>quandidade</th>
+                <th>Preco</th>
+                <th>Quandidade</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for item in itens %}
-                <tr>
-                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.id}}</a></td>
-                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.pedido}}</a></td>
-                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.produto}}</a></td>
-                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.preco}}</a></td>
-                    <td><a href="{% url 'item_detalhe' item.id %}">{{item.quantidade}}</a></td>
-
-                </tr>
+            <tr style="text-align: center; vertical-align: middle;">
+                <td>{{item.id}}</td>
+                <td>{{item.pedido}}</td>
+                <td>{{item.produto}}</td>
+                <td>{{item.preco}}</td>
+                <td>{{item.quantidade}}</td>
+                <td>
+                    <a href="{% url 'item_detalhe' item.id %}" class="btn btn-success">Detalhe</a>
+                    <a href="{% url 'item_update' item.id %}" class="btn btn-warning">Alterar</a>
+                    <a href="{% url 'item_del' item.id %}" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+    <nav aria-label="Paginação de itens">
+        <ul class="pagination">
+            {% for pagina in itens.paginator.page_range %}
+            {% if itens.number == pagina %}
+            <li class="page-item active"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%else%}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            {%endif%}
+            {%endfor%}
+        </ul>
+    </nav>
 </div>
 {% endblock %}
